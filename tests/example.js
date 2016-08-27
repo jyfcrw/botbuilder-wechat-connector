@@ -1,25 +1,23 @@
-var restify  = require('restify'),
-    builder  = require('botbuilder'),
-    wechatConnector = require('../WechatConnector');
-
-var bot, connector, server;
+var restify   = require('restify'),
+    builder   = require('botbuilder'),
+    connector = require('../WechatConnector');
 
 // Create wechat connector
-connector = new wechatConnector({
+var wechatConnector = new connector.WechatConnector({
     appID: "YOUR WECHAT APP ID",
     appSecret: "YOUR WECHAT APP SECRET",
     appToken: "YOUR WECHAT TOKEN"
 });
 
-bot = new builder.UniversalBot(connector);
+var bot = new builder.UniversalBot(wechatConnector);
 
 // Bot dialogs
 // Todo..
 
 // Create http server
-server = restify.createServer();
+var server = restify.createServer();
 
-server.use(connector.listen());
+server.use(wechatConnector.listen());
 
 server.get('/', function(req, res) {
     res.send(200, 'Hello Bot');
