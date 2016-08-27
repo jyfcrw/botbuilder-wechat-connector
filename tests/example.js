@@ -1,6 +1,9 @@
-var restify   = require('restify'),
+var express   = require('express'),
     builder   = require('botbuilder'),
     connector = require('../WechatConnector');
+
+// Create http server
+var app    = express();
 
 // Create wechat connector
 var wechatConnector = new connector.WechatConnector({
@@ -14,16 +17,13 @@ var bot = new builder.UniversalBot(wechatConnector);
 // Bot dialogs
 // Todo..
 
-// Create http server
-var server = restify.createServer();
+app.use('/bot/wechat', wechatConnector.listen());
 
-server.use(wechatConnector.listen());
-
-server.get('/', function(req, res) {
-    res.send(200, 'Hello Bot');
+app.get('*', function(req, res) {
+    res.send(200, 'Hello Wechat Bot');
 });
 
 // Start listen on port
-server.listen(process.env.port || 9090, function () {
-    console.log('%s listening to %s ...', server.name, server.url);
+app.listen(process.env.port || 9090, function() {
+    console.log('server is running.');
 });
