@@ -15,7 +15,14 @@ var wechatConnector = new connector.WechatConnector({
 var bot = new builder.UniversalBot(wechatConnector);
 
 // Bot dialogs
-// Todo..
+bot.dialog('/', [
+    function (session) {
+        session.send("Hi, welcome");
+    },
+    function (session, results) {
+        session.send("OK");
+    }
+]);
 
 app.use('/bot/wechat', wechatConnector.listen());
 
