@@ -27,11 +27,10 @@ var WechatConnector = (function() {
         }
 
         return wechat(config, function(req, res, next) {
-            if (!self.options.enableReply) {
-                var msg = req.weixin,
-                    type = msg.MsgType;
+            var wechatMessage = req.weixin;
 
-                self.processMessage(msg, type);
+            if (!self.options.enableReply) {
+                self.processMessage(wechatMessage);
                 res.status(200).end();
             } else {
                 next();
@@ -39,25 +38,61 @@ var WechatConnector = (function() {
         });
     };
 
-    WechatConnector.prototype.processMessage = function (msg, type) {
-        this.wechatAPI.sendText(msg.FromUserName, "hi!", function (err) {
-            if (err) {
-                console.log('Error sending message', err);
-            }
-        });
+    WechatConnector.prototype.processMessage = function (wechatMessage) {
+        var msg, msgType = wechatMessage.MsgType;
+
+        var addr = {
+            channelId: 'wechat',
+            user: { id: wechatMessage.FromUserName, name: 'Unknow' },
+            bot: { id: wechatMessage.ToUserName, name: 'Bot' },
+            conversation: { id: 'Convo1' }
+        };
+
+        if (!this.handler) {
+            throw new Error('Error no handler');
+        }
+
+        msg = new builder.Message().address(addr).timestamp();
+
+        if (msgType == 'text') {
+            msg.text(wechatMessage.Content);
+        } else {
+            msg.text("Empty");
+        }
+
+        this.handler([msg.toMessage()]);
+
+        return this;
     };
 
     WechatConnector.prototype.onEvent = function (handler) {
-        // this.handler = handler;
+        this.handler = handler;
     };
 
     WechatConnector.prototype.send = function (messages, cb) {
+        for (var i = 0; i < messages.length; i++) {
+            var msg  = messages[i],
+                addr = msg.address;
 
+            console.log(msg);
+
+            if (msg.text) {
+                this.wechatAPI.sendText(addr.user.id, msg.text, errorHandle);
+            }
+        }
     };
 
     WechatConnector.prototype.startConversation = function (address, cb) {
-
+        var adr = _.assign({}, address);
+        adr.conversation = { id: 'Convo1' };
+        cb(null, adr);
     };
+
+    function errorHandle(err) {
+        if (err) {
+            console.log('Error', err);
+        }
+    }
 
     return WechatConnector;
 })();
