@@ -4,6 +4,7 @@
   "description": "Microsoft Bot Framework connector for Wechat office account",
   "main": "WechatConnector.js",
   "scripts": {
+    "test": "node tests/example.js"
   },
   "repository": {
     "type": "git",
@@ -26,5 +27,6 @@
     "wechat": "^2.0.3"
   },
   "devDependencies": {
+    "restify": "^4.0.0"
   }
 }
