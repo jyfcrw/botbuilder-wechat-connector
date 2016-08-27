@@ -55,9 +55,7 @@ var WechatConnector = (function() {
         msg = new builder.Message().address(addr).timestamp();
 
         if (msgType == 'text') {
-            msg.text(wechatMessage.Content);
-        } else {
-            msg.text("Empty");
+            msg = msg.text(wechatMessage.Content);
         }
 
         this.handler([msg.toMessage()]);
@@ -73,8 +71,6 @@ var WechatConnector = (function() {
         for (var i = 0; i < messages.length; i++) {
             var msg  = messages[i],
                 addr = msg.address;
-
-            console.log(msg);
 
             if (msg.text) {
                 this.wechatAPI.sendText(addr.user.id, msg.text, errorHandle);

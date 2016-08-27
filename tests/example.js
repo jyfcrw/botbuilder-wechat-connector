@@ -17,10 +17,20 @@ var bot = new builder.UniversalBot(wechatConnector);
 // Bot dialogs
 bot.dialog('/', [
     function (session) {
-        session.send("Hi, welcome");
+        if (session.userData && session.userData.name) {
+            session.send("Hello, " + session.userData.name);
+        } else {
+            builder.Prompts.text(session, "What's your name?");
+        }
     },
     function (session, results) {
-        session.send("OK");
+        session.userData.name = results.response;
+        session.send("OK, " + session.userData.name);
+        builder.Prompts.text(session, "What's your age?");
+    },
+    function (session, results) {
+        session.userData.age = results.response;
+        session.send("All right, " + results.response);
     }
 ]);
 
