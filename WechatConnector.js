@@ -39,27 +39,45 @@ var WechatConnector = (function() {
     };
 
     WechatConnector.prototype.processMessage = function (wechatMessage) {
-        var msg, msgType = wechatMessage.MsgType;
+        var msg,
+            addr,
+            atts = [],
+            msgType = wechatMessage.MsgType;
 
-        var addr = {
+        if (!this.handler) {
+            throw new Error('Error no handler');
+        }
+
+        addr = {
             channelId: 'wechat',
             user: { id: wechatMessage.FromUserName, name: 'Unknow' },
             bot: { id: wechatMessage.ToUserName, name: 'Bot' },
             conversation: { id: 'Convo1' }
         };
 
-        if (!this.handler) {
-            throw new Error('Error no handler');
-        }
-
-        msg = new builder.Message().address(addr).timestamp();
+        msg = new builder.Message()
+                         .address(addr)
+                         .timestamp() // wechatMessage.CreateTime
+                         .entities();
 
         if (msgType == 'text') {
             msg = msg.text(wechatMessage.Content);
+        } else {
+            msg = msg.text('');
         }
 
-        this.handler([msg.toMessage()]);
+        if (msgType == 'image') {
+            atts.push({
+                contentType: 'application/octet-stream',
+                content: {
+                    url: wechatMessage.PicUrl,
+                    mediaId: wechatMessage.MediaId
+                }
+            });
+        }
 
+        msg = msg.attachments(atts);
+        this.handler([msg.toMessage()]);
         return this;
     };
 
@@ -69,19 +87,24 @@ var WechatConnector = (function() {
 
     WechatConnector.prototype.send = function (messages, cb) {
         for (var i = 0; i < messages.length; i++) {
-            var msg  = messages[i],
-                addr = msg.address;
-
-            if (msg.text) {
-                this.wechatAPI.sendText(addr.user.id, msg.text, errorHandle);
-            }
+            this.postMessage(messages[i]);
         }
     };
 
     WechatConnector.prototype.startConversation = function (address, cb) {
-        var adr = _.assign({}, address);
-        adr.conversation = { id: 'Convo1' };
-        cb(null, adr);
+        var addr = _.assign(address, {
+            conversation: { id: 'Convo1' }
+        });
+
+        cb(null, addr);
+    };
+
+    WechatConnector.prototype.postMessage = function (message, cb) {
+        var addr = message.address;
+
+        if (message.text) {
+            this.wechatAPI.sendText(addr.user.id, message.text, errorHandle);
+        }
     };
 
     function errorHandle(err) {

@@ -18,7 +18,7 @@ var bot = new builder.UniversalBot(wechatConnector);
 bot.dialog('/', [
     function (session) {
         if (session.userData && session.userData.name) {
-            session.send("Hello, " + session.userData.name);
+            session.send("How are you, " + session.userData.name);
         } else {
             builder.Prompts.text(session, "What's your name?");
         }
