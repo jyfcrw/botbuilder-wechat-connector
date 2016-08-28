@@ -68,10 +68,64 @@ var WechatConnector = (function() {
 
         if (msgType == 'image') {
             atts.push({
-                contentType: 'application/octet-stream',
+                contentType: 'wechat/image',
                 content: {
                     url: wechatMessage.PicUrl,
                     mediaId: wechatMessage.MediaId
+                }
+            });
+        }
+
+        if (msgType == 'voice') {
+            atts.push({
+                contentType: 'wechat/voice',
+                content: {
+                    format: wechatMessage.Format,
+                    mediaId: wechatMessage.MediaId,
+                    recognition: wechatMessage.Recognition
+                }
+            });
+        }
+
+        if (msgType == 'video') {
+            atts.push({
+                contentType: 'wechat/video',
+                content: {
+                    mediaId: wechatMessage.MediaId,
+                    thumbMediaId: wechatMessage.ThumbMediaId
+                }
+            });
+        }
+
+        if (msgType = 'shortvideo') {
+            atts.push({
+                contentType: 'wechat/shortvideo',
+                content: {
+                    mediaId: wechatMessage.MediaId,
+                    thumbMediaId: wechatMessage.ThumbMediaId
+                }
+            });
+        }
+
+        if (msgType == 'link') {
+            atts.push({
+                contentType: 'wechat/link',
+                content: {
+                    title: wechatMessage.Title,
+                    description: wechatMessage.Description,
+                    url: wechatMessage.Url
+                }
+            });
+        }
+
+        if (msgType == 'location') {
+            atts.push({
+                contentType: 'wechat/location',
+                content: {
+                    locationX: wechatMessage.Location_X,
+                    locationY: wechatMessage.Location_Y,
+                    scale: wechatMessage.Scale,
+                    label: wechatMessage.Label
                 }
             });
         }
