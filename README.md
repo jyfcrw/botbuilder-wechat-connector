@@ -1,2 +1,3 @@
 # botbuilder-wechat-connector
-Microsoft Bot Framework connector for Wechat office account
+Microsoft Bot Framework V3 connector for Wechat office account
+

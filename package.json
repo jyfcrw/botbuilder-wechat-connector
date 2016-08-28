@@ -1,7 +1,7 @@
 {
   "name": "botbuilder-wechat-connector",
   "version": "1.0.0",
-  "description": "Microsoft Bot Framework connector for Wechat office account",
+  "description": "Microsoft Bot Framework V3 connector for Wechat office account",
   "main": "WechatConnector.js",
   "scripts": {
     "test": "node tests/example.js"
@@ -11,9 +11,10 @@
     "url": "https://github.com/jyfcrw/botbuilder-wechat-connector.git"
   },
   "keywords": [
+    "weixin",
     "wechat",
     "botbuilder",
-    "node"
+    "connector"
   ],
   "author": "Orwme",
   "license": "MIT",
