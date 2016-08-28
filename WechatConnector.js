@@ -57,7 +57,7 @@ var WechatConnector = (function() {
 
         msg = new builder.Message()
                          .address(addr)
-                         .timestamp() // wechatMessage.CreateTime
+                         .timestamp(convertTimestamp(wechatMessage.CreateTime))
                          .entities();
 
         if (msgType == 'text') {
@@ -165,6 +165,10 @@ var WechatConnector = (function() {
         if (err) {
             console.log('Error', err);
         }
+    }
+
+    function convertTimestamp(ts) {
+        return new Date(parseInt(ts) * 1000).toISOString();
     }
 
     return WechatConnector;
