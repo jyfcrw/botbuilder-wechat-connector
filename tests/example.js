@@ -18,6 +18,14 @@ var bot = new builder.UniversalBot(wechatConnector);
 bot.dialog('/', [
     function (session) {
         if (session.userData && session.userData.name) {
+            if (session.message.attachments &&
+                session.message.attachments.length > 0) {
+                var atm = session.message.attachments[0];
+                if (atm.contentType == connector.WechatAttachmentType.Image) {
+                    var msg = new builder.Message(session).attachments([atm]);
+                    session.send(msg);
+                }
+            }
             session.send("How are you, " + session.userData.name);
         } else {
             builder.Prompts.text(session, "What's your name?");
