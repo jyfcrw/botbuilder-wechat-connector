@@ -5,6 +5,19 @@ var _            = require('lodash'),
     wechat       = require('wechat'),
     WechatAPI    = require('wechat-api');
 
+const AttachmentType = {
+    Image:      'wechat/image',
+    Voice:      'wechat/voice',
+    Video:      'wechat/video',
+    ShortVideo: 'wechat/shortvideo',
+    Link:       'wechat/link',
+    Location:   'wechat/location',
+    Music:      'wechat/music',
+    News:       'wechat/news',
+    MpNews:     'wechat/mpnews',
+    Card:       'wechat/card'
+};
+
 var WechatConnector = (function() {
     function WechatConnector(opts) {
         this.options = _.assign({
@@ -68,7 +81,7 @@ var WechatConnector = (function() {
 
         if (msgType == 'image') {
             atts.push({
-                contentType: 'wechat/image',
+                contentType: AttachmentType.Image,
                 content: {
                     url: wechatMessage.PicUrl,
                     mediaId: wechatMessage.MediaId
@@ -78,7 +91,7 @@ var WechatConnector = (function() {
 
         if (msgType == 'voice') {
             atts.push({
-                contentType: 'wechat/voice',
+                contentType: AttachmentType.Voice,
                 content: {
                     format: wechatMessage.Format,
                     mediaId: wechatMessage.MediaId,
@@ -89,7 +102,7 @@ var WechatConnector = (function() {
 
         if (msgType == 'video') {
             atts.push({
-                contentType: 'wechat/video',
+                contentType: AttachmentType.Video,
                 content: {
                     mediaId: wechatMessage.MediaId,
                     thumbMediaId: wechatMessage.ThumbMediaId
@@ -99,7 +112,7 @@ var WechatConnector = (function() {
 
         if (msgType = 'shortvideo') {
             atts.push({
-                contentType: 'wechat/shortvideo',
+                contentType: AttachmentType.ShortVideo,
                 content: {
                     mediaId: wechatMessage.MediaId,
                     thumbMediaId: wechatMessage.ThumbMediaId
@@ -109,7 +122,7 @@ var WechatConnector = (function() {
 
         if (msgType == 'link') {
             atts.push({
-                contentType: 'wechat/link',
+                contentType: AttachmentType.Link,
                 content: {
                     title: wechatMessage.Title,
                     description: wechatMessage.Description,
@@ -120,7 +133,7 @@ var WechatConnector = (function() {
 
         if (msgType == 'location') {
             atts.push({
-                contentType: 'wechat/location',
+                contentType: AttachmentType.Location,
                 content: {
                     locationX: wechatMessage.Location_X,
                     locationY: wechatMessage.Location_Y,
@@ -154,10 +167,49 @@ var WechatConnector = (function() {
     };
 
     WechatConnector.prototype.postMessage = function (message, cb) {
-        var addr = message.address;
+        var self = this,
+            addr = message.address,
+            user = addr.user;
 
-        if (message.text) {
-            this.wechatAPI.sendText(addr.user.id, message.text, errorHandle);
+        if (message.text && message.text.length > 0) {
+            this.wechatAPI.sendText(user.id, message.text, errorHandle);
+        }
+
+        if (message.attachments && message.attachments.length > 0) {
+            for (var i = 0; i < message.attachments.length; i++) {
+                var atm = message.attachments[i],
+                    atmType = atm.contentType,
+                    atmCont = atm.content;
+
+                if (!atmCont) continue;
+
+                switch(atmType) {
+                    case AttachmentType.Image:
+                        this.wechatAPI.sendImage(user.id, atmCont.mediaId, errorHandle);
+                        break;
+                    case AttachmentType.Voice:
+                        this.wechatAPI.sendVoice(user.id, atmCont.mediaId, errorHandle);
+                        break;
+                    case AttachmentType.Video:
+                        this.wechatAPI.sendVideo(user.id, atmCont.mediaId, atmCont.thumbMediaId, errorHandle);
+                        break;
+                    case AttachmentType.Music:
+                        this.wechatAPI.sendMusic(user.id, atmCont, errorHandle);
+                        break;
+                    case AttachmentType.News:
+                        this.wechatAPI.sendNews(user.id, atmCont, errorHandle);
+                        break;
+                    case AttachmentType.MpNews:
+                        this.wechatAPI.sendMpNews(user.id, atmCont.mediaId, errorHandle);
+                        break;
+                    case AttachmentType.Card:
+                        this.wechatAPI.sendCard(user.id, atmCont, errorHandle);
+                        break;
+                    default:
+                        // Unknow attachment
+                        break;
+                }
+            }
         }
     };
 
@@ -174,4 +226,5 @@ var WechatConnector = (function() {
     return WechatConnector;
 })();
 
-exports.WechatConnector = WechatConnector;
+exports.WechatConnector      = WechatConnector;
+exports.WechatAttachmentType = AttachmentType;
