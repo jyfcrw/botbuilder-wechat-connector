@@ -35,6 +35,7 @@ var wechatConnector = new connector.WechatConnector({
     appID: "YOUR WECHAT APP ID",
     appSecret: "YOUR WECHAT APP SECRET",
     appToken: "YOUR WECHAT TOKEN"
+});
 
 var bot = new builder.UniversalBot(wechatConnector);
 ```
@@ -265,6 +266,13 @@ Only receiving messages can have this message type.
 		label: 'LABEL'
 	}
 }
+```
+
+## Example
+An example is located at tests directory. Using following command to run it.
+
+```
+npm test
 ```
 
 ## Thanks
