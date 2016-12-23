@@ -44,6 +44,7 @@ var WechatConnector = (function() {
 
             if (!self.options.enableReply) {
                 self.processMessage(wechatMessage);
+
                 res.status(200).end();
             } else {
                 next();
@@ -69,17 +70,17 @@ var WechatConnector = (function() {
         };
 
         msg = new builder.Message()
-                         .address(addr)
-                         .timestamp(convertTimestamp(wechatMessage.CreateTime))
-                         .entities();
+            .address(addr)
+            .timestamp(convertTimestamp(wechatMessage.CreateTime))
+            .entities();
 
-        if (msgType == 'text') {
+        if (msgType === 'text') {
             msg = msg.text(wechatMessage.Content);
         } else {
             msg = msg.text('');
         }
 
-        if (msgType == 'image') {
+        if (msgType === 'image') {
             atts.push({
                 contentType: AttachmentType.Image,
                 content: {
@@ -89,7 +90,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'voice') {
+        if (msgType === 'voice') {
             atts.push({
                 contentType: AttachmentType.Voice,
                 content: {
@@ -100,7 +101,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'video') {
+        if (msgType === 'video') {
             atts.push({
                 contentType: AttachmentType.Video,
                 content: {
@@ -110,7 +111,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'shortvideo') {
+        if (msgType === 'shortvideo') {
             atts.push({
                 contentType: AttachmentType.ShortVideo,
                 content: {
@@ -120,7 +121,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'link') {
+        if (msgType === 'link') {
             atts.push({
                 contentType: AttachmentType.Link,
                 content: {
@@ -131,7 +132,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'location') {
+        if (msgType === 'location') {
             atts.push({
                 contentType: AttachmentType.Location,
                 content: {
@@ -153,8 +154,11 @@ var WechatConnector = (function() {
     };
 
     WechatConnector.prototype.send = function (messages, cb) {
+
+        console.log(util.inspect(messages));
+
         for (var i = 0; i < messages.length; i++) {
-            this.postMessage(messages[i]);
+            this.postMessage(messages[i], cb);
         }
     };
 
@@ -210,6 +214,10 @@ var WechatConnector = (function() {
                         break;
                 }
             }
+        }
+
+        if(cb) {
+            cb(null);
         }
     };
 
