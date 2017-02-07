@@ -1,6 +1,6 @@
 {
   "name": "morphet-botbuilder-wechat-connector",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Microsoft Bot Framework V3 connector for Wechat office account",
   "main": "WechatConnector.js",
   "scripts": {
