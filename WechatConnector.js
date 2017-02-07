@@ -24,7 +24,7 @@ var WechatConnector = (function() {
             enableReply: false
         }, opts);
 
-        this.wechatAPI = new WechatAPI(this.options.appID, this.options.appSecret);
+        this.wechatAPI = new WechatAPI(this.options.appID, this.options.appSecret, this.options.readAccessToken, this.options.writeAccessToken);
     }
 
     WechatConnector.prototype.listen = function () {
@@ -66,7 +66,8 @@ var WechatConnector = (function() {
             channelId: 'wechat',
             user: { id: wechatMessage.FromUserName, name: 'Unknow' },
             bot: { id: wechatMessage.ToUserName, name: 'Bot' },
-            conversation: { id: 'Convo1' }
+            conversation: { id: 'Convo1' },
+            wechatMessage: wechatMessage
         };
 
         msg = new builder.Message()
