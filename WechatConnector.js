@@ -66,8 +66,10 @@ var WechatConnector = (function() {
             channelId: 'wechat',
             user: { id: wechatMessage.FromUserName, name: 'Unknow' },
             bot: { id: wechatMessage.ToUserName, name: 'Bot' },
-            conversation: { id: 'Convo1' },
-            wechatMessage: wechatMessage
+            conversation: {
+                id: 'Convo1',
+                wechatMessage: wechatMessage
+            }
         };
 
         msg = new builder.Message()
@@ -155,9 +157,6 @@ var WechatConnector = (function() {
     };
 
     WechatConnector.prototype.send = function (messages, cb) {
-
-        console.log(util.inspect(messages));
-
         for (var i = 0; i < messages.length; i++) {
             this.postMessage(messages[i], cb);
         }
