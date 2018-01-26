@@ -75,7 +75,13 @@ var WechatConnector = (function() {
 
         if (msgType === 'text') {
             msg = msg.text(wechatMessage.Content);
-        } else {
+        } else if (msgType == 'voice') {
+            if (wechatMessage.Recognition) {
+                msg = msg.text(wechatMessage.Recognition)
+            } else {
+                msg = msg.text('');
+            }
+        } else{
             msg = msg.text('');
         }
 
