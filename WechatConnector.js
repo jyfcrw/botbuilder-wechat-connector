@@ -63,7 +63,7 @@ var WechatConnector = (function() {
 
         addr = {
             channelId: 'wechat',
-            user: { id: wechatMessage.FromUserName, name: 'Unknow' },
+            user: { id: wechatMessage.FromUserName, name: 'Unknown' },
             bot: { id: wechatMessage.ToUserName, name: 'Bot' },
             conversation: { id: 'Convo1' }
         };
@@ -73,13 +73,13 @@ var WechatConnector = (function() {
                          .timestamp(convertTimestamp(wechatMessage.CreateTime))
                          .entities();
 
-        if (msgType == 'text') {
+        if (msgType === 'text') {
             msg = msg.text(wechatMessage.Content);
         } else {
             msg = msg.text('');
         }
 
-        if (msgType == 'image') {
+        if (msgType === 'image') {
             atts.push({
                 contentType: AttachmentType.Image,
                 content: {
@@ -89,7 +89,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'voice') {
+        if (msgType === 'voice') {
             atts.push({
                 contentType: AttachmentType.Voice,
                 content: {
@@ -100,7 +100,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'video') {
+        if (msgType === 'video') {
             atts.push({
                 contentType: AttachmentType.Video,
                 content: {
@@ -110,7 +110,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType = 'shortvideo') {
+        if (msgType === 'shortvideo') {
             atts.push({
                 contentType: AttachmentType.ShortVideo,
                 content: {
@@ -120,7 +120,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'link') {
+        if (msgType === 'link') {
             atts.push({
                 contentType: AttachmentType.Link,
                 content: {
@@ -131,7 +131,7 @@ var WechatConnector = (function() {
             });
         }
 
-        if (msgType == 'location') {
+        if (msgType === 'location') {
             atts.push({
                 contentType: AttachmentType.Location,
                 content: {
@@ -206,7 +206,7 @@ var WechatConnector = (function() {
                         this.wechatAPI.sendCard(user.id, atmCont, errorHandle);
                         break;
                     default:
-                        // Unknow attachment
+                        // Unknown attachment
                         break;
                 }
             }
