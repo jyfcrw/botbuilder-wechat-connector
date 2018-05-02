@@ -1,6 +1,6 @@
 {
   "name": "botbuilder-wechat-connector",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Microsoft Bot Framework V3 connector for Wechat office account",
   "main": "WechatConnector.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jyfcrw/botbuilder-wechat-connector.git"
+    "url": "https://github.com/morphet81/botbuilder-wechat-connector"
   },
   "keywords": [
     "weixin",
@@ -19,9 +19,9 @@
   "author": "Orwme",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jyfcrw/botbuilder-wechat-connector/issues"
+    "url": "https://github.com/morphet81/botbuilder-wechat-connector/issues"
   },
-  "homepage": "https://github.com/jyfcrw/botbuilder-wechat-connector",
+  "homepage": "https://github.com/morphet81/botbuilder-wechat-connector",
   "dependencies": {
     "botbuilder": "^3.2.0",
     "wechat-api": "^1.28.0",
